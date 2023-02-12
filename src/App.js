@@ -1,5 +1,4 @@
 import React, {useState, useMemo} from 'react';
-import ClassCounter from './components/ClassCounter';
 import PostForm from './components/PostForm';
 import PostItem from './components/PostItem';
 import PostList from './components/PostList'
@@ -9,44 +8,47 @@ import MySelect from './components/UI/select/MySelect';
 import PostFilter from './components/PostFilter';
 import './styles/App.css';
 import MyModal from './components/UI/MyModal/MyModal';
-/*-------------------------------------------------------------------------------*/
+import { usePosts } from './hooks/usePosts';
+import axios from 'axios'
+import { useEffect } from 'react';
+import PostService from './API/PostService';
+import Loader from './components/UI/Loader/Loader';
+import { useFetching } from './hooks/useFetching';
+
+/*----------------------------------------------------------------------------------------------------------*/
 
 
 
 
 function App() {
 
-  /*-------------------------------   CONST DECLARATION     ---------------------------*/
+  /*-------------------------------   STATES     ---------------------------*/
 
 
   const [posts, setPosts] = useState([
-      {id:1, title:'aavascript', body:'Aava-scriptizer'},
+      /* {id:1, title:'aavascript', body:'Aava-scriptizer'},
       {id:2, title:'cytuhon', body:'Bm Bytuhon'},
-      {id:3, title:'besting', body:'Cm testing man'},
+      {id:3, title:'besting', body:'Cm testing man'}, */
   ])
+  
 
   const [filter, setFilter] = useState({sort:'', query:''}) 
 
-  const [modal, setModal] = useState('false')
+  const [modal, setModal] = useState('false');
 
+  const sortedAndSearchedPost = usePosts(posts, filter.sort, filter.query);
 
-    /*-------------------------------   SORT LOGIC    --------------------------------*/
+  const [fetchPosts, isPostLoading, postError] = useFetching( async () => {
+      const posts = await PostService.getAll();
+      setPosts(posts)
+  });
 
-  const sortedPosts = useMemo(()=>{
-        console.log('function called')
-    if(filter.sort){
-      return [...posts].sort((a, b)=>a[filter.sort].localeCompare(b[filter.sort]))
-    }
-    return posts;
-  },[filter.sort, posts])
+  useEffect(()=>{
+    fetchPosts()
+  },
+  []);
 
-  
-  const sortedAndSearchedPost = useMemo(() => {
-    return sortedPosts.filter(post => post.title.toLocaleLowerCase().includes(filter.query))
-  }, [filter.query, sortedPosts])
-
-
-
+ 
 /*--------------------------------------------------------------------------------*/
 
 /*-------------------------     CREATE/REMOVE POST     --------------------------*/
@@ -60,7 +62,12 @@ function App() {
     setPosts(posts.filter(p => p.id !==post.id))
   }
 
-/*-------------------------------------------------------------------------------*/
+/*----------------------------------    SERVER    ------------------------------*/
+
+
+
+
+/*----------------------------------------    RETURN APP COMPONENT      --------------------------------------*/
 
 
   return (
@@ -72,13 +79,10 @@ function App() {
       >
         Create post
       </MyButton>
-      <MyModal
-        visible={modal}
-        setVisible={setModal}
-      >
+
+      <MyModal visible={modal} setVisible={setModal}>
         <PostForm 
-          create={createPost}
-        />
+          create={createPost}/>
       </MyModal>
       
 
@@ -89,9 +93,10 @@ function App() {
         setFilter={setFilter}
       />
 
-      {sortedAndSearchedPost.length
-        ? <PostList remove={removePost} posts={sortedAndSearchedPost} title="JS posts"/>
-        : <h1 style={{textAlign: 'center'}}>No posts yet!</h1>
+      {postError && <h1>Something went wrong ${postError}</h1>} 
+      {isPostLoading
+        ?  <div style={{display:'flex', justifyContent: 'center', marginTop: 50}}><Loader/></div>
+        : <PostList remove={removePost} posts={sortedAndSearchedPost} title="JS posts"/>
       }
     </div>
   );
