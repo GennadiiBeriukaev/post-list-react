@@ -4,7 +4,7 @@
     height: 50px;
     border-radius: 50%;
     border: 3px dashed  teal;
-    animation: rotate 4s infinite linear ;
+    animation: rotate 1s infinite linear ;
 }
 
 

@@ -14,6 +14,9 @@ import { useEffect } from 'react';
 import PostService from './API/PostService';
 import Loader from './components/UI/Loader/Loader';
 import { useFetching } from './hooks/useFetching';
+import {getPageCount} from './utils/pages'
+import {getPagesArray} from './utils/pages'
+import Pagination from './components/UI/pagination/Pagination';
 
 /*----------------------------------------------------------------------------------------------------------*/
 
@@ -26,9 +29,7 @@ function App() {
 
 
   const [posts, setPosts] = useState([
-      /* {id:1, title:'aavascript', body:'Aava-scriptizer'},
-      {id:2, title:'cytuhon', body:'Bm Bytuhon'},
-      {id:3, title:'besting', body:'Cm testing man'}, */
+      
   ])
   
 
@@ -36,17 +37,33 @@ function App() {
 
   const [modal, setModal] = useState('false');
 
+  const [totalPages, setTotalPages] = useState(0);
+
+  const [limit, setLimit] = useState(10);
+
+  const [page, setPage] = useState(1);
+
   const sortedAndSearchedPost = usePosts(posts, filter.sort, filter.query);
 
-  const [fetchPosts, isPostLoading, postError] = useFetching( async () => {
-      const posts = await PostService.getAll();
-      setPosts(posts)
-  });
 
+  
+ 
+
+  const [fetchPosts, isPostLoading, postError] = useFetching( async () => {
+      const responce = await PostService.getAll(limit, page);
+      setPosts(responce.data)
+      const totalCount = responce.headers['x-total-count']
+      setTotalPages(getPageCount(totalCount, limit));
+  });
+       
   useEffect(()=>{
     fetchPosts()
   },
-  []);
+  [page]);
+
+  const changePage = (page) => {
+    setPage(page)
+  }
 
  
 /*--------------------------------------------------------------------------------*/
@@ -66,7 +83,6 @@ function App() {
 
 
 
-
 /*----------------------------------------    RETURN APP COMPONENT      --------------------------------------*/
 
 
@@ -74,7 +90,7 @@ function App() {
 
     <div className="App">
       <MyButton
-        style={{marginTop: 30}}
+        style={{marginTop: 30 }}
         onClick={()=>setModal(true)}
       >
         Create post
@@ -98,6 +114,9 @@ function App() {
         ?  <div style={{display:'flex', justifyContent: 'center', marginTop: 50}}><Loader/></div>
         : <PostList remove={removePost} posts={sortedAndSearchedPost} title="JS posts"/>
       }
+
+      <Pagination page={page} changePage={changePage} totalPages={totalPages}/>
+      
     </div>
   );
 }
