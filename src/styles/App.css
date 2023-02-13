@@ -11,6 +11,7 @@
 
 .App{
     width: 800px;
+    align-self: center;
 }
 
 .post{
@@ -66,3 +67,45 @@
     border: 3px solid orangered;
     font-weight: bold;
   }
+
+  
+
+
+.navbar {
+  height: 50px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  background: rgba(96, 192, 182, 0.597); 
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: bold;
+
+}
+
+
+.navbar__links{
+  display: flex;
+  align-self: center;
+  gap: 50px;
+}
+
+.main__links{
+  text-decoration: none;
+  border: 1px solid black;
+  width: 150px;
+  height: 30px;
+  line-height: 16px;
+  text-align: center;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  color: black;
+}
+
+.main__page{
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
