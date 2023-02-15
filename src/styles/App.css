@@ -4,6 +4,14 @@
     box-sizing: border-box;
 }
 
+ul {
+  list-style-type: none;
+}
+
+a:-webkit-any-link {
+  text-decoration: none;
+}
+
 #root{
     display: flex;
     justify-content: center;
@@ -109,3 +117,8 @@
   flex-direction: column;
   padding: 5px;
 }
+
+.post__btns{
+  display: flex;
+  gap: 5px;
+} 

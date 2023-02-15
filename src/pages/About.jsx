@@ -1,13 +1,16 @@
 import React from 'react'
-import {BrowserRouter, Link, Route, Routes} from "react-router-dom"
+import {BrowserRouter, Link, Route, Routes, Outlet} from "react-router-dom"
 
 const About = () => {
 
   return (
+    <div>
     <h1>
-        This page has not been created yet, wait please :gi)
+        This page is About <br /><br /><br /><br />
     </h1>
-  )
+      <Outlet />
+    </div>
+  );
 }
 
 export default About

@@ -17,11 +17,13 @@ import { useFetching } from './hooks/useFetching';
 import {getPageCount} from './utils/pages'
 import {getPagesArray} from './utils/pages'
 import Pagination from './components/UI/pagination/Pagination';
-import {BrowserRouter, Link, Route, Routes,} from "react-router-dom"
+import {BrowserRouter, Link, Route, Routes, useLocation} from "react-router-dom"
 import About from './pages/About';
 import Posts from './pages/Posts';
 import NavBar from './components/UI/NavBar/NavBar';
 import Error from './pages/Error';
+import AppRouter from './components/AppRouter'; 
+
 
 /*----------------------------------------------------------------------------------------------------------*/
 
@@ -29,15 +31,11 @@ import Error from './pages/Error';
 
 
 function App() {
-
   return (
   <div className="main__page">
       <NavBar/>
-          <Routes>  
-              <Route path="/about" element={ <About/>}/>
-              <Route path="/posts" element={ <Posts/>}/>
-              <Route path="*" element={<Error/>}/>
-          </Routes>
+
+      <AppRouter/>
     </div>
     
   );
