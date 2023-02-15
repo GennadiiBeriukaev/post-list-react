@@ -11,6 +11,7 @@ import Loader from '../components/UI/Loader/Loader';
 import { useFetching } from '../hooks/useFetching';
 import {getPageCount} from '../utils/pages'
 import Pagination from '../components/UI/pagination/Pagination';
+import MySelect from '../components/UI/select/MySelect';
 
 /*----------------------------------------------------------------------------------------------------------*/
 
@@ -51,7 +52,7 @@ function Posts() {
   useEffect(()=>{
     fetchPosts()
   },
-  [page]);
+  [page, limit]);
 
   const changePage = (page) => {
     setPage(page)
@@ -100,6 +101,19 @@ function Posts() {
       <PostFilter
         filter={filter}
         setFilter={setFilter}
+      />
+
+      <MySelect
+        style={{marginTop: 20}}
+        value={limit}
+        onChange={value => setLimit(value)}
+        defaultValue="number of items per page"
+        options={[
+          {value:5, name:'5'},
+          {value:10, name:'10'},
+          {value:25, name:'25'},
+          {value:-1, name:'Show all'},
+        ]}
       />
 
       {postError && <h1>Something went wrong ${postError}</h1>} 
