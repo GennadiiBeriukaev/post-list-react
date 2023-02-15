@@ -23,6 +23,7 @@ import Posts from './pages/Posts';
 import NavBar from './components/UI/NavBar/NavBar';
 import Error from './pages/Error';
 import AppRouter from './components/AppRouter'; 
+import { AuthContext } from './context';
 
 
 /*----------------------------------------------------------------------------------------------------------*/
@@ -31,13 +32,24 @@ import AppRouter from './components/AppRouter';
 
 
 function App() {
+  const [isAuth, setIsAuth] = useState(false);
+    useEffect(()=>{
+      if (localStorage.getItem('auth')){
+      setIsAuth(true)
+    }
+    }, [])
   return (
-  <div className="main__page">
-      <NavBar/>
-
-      <AppRouter/>
-    </div>
-    
+    <AuthContext.Provider
+      value={{
+        isAuth,
+        setIsAuth,
+      }}
+    >
+        <div className="main__page">
+          <NavBar/>
+          <AppRouter/>
+        </div>
+    </AuthContext.Provider>
   );
 }
 

@@ -30,7 +30,7 @@ const PostPage = () => {
   return (
     <div>
         {isLoading 
-        ? <div style={{display:'flex', justifyContent: 'center', marginTop: 50}}><Loader/></div>
+        ? <div style={{display:'flex', justifyContent: 'center', marginTop: 50}}><Loader /></div>
         : <div 
             style={{textAlign: 'center', maxWidth: 800, marginLeft: 'auto', marginRight: 'auto' }}> 
             <h1>{post.id}</h1> <h2>{post.title} </h2>
@@ -44,12 +44,13 @@ const PostPage = () => {
 
          <div>
             {isComLoading
-            ? <div style={{display:'flex', justifyContent: 'center', marginTop: 50}}><Loader/></div>
+            ? <div style={{display:'flex', justifyContent: 'center', marginTop: 50}}><Loader /></div>
             : <div>
-               
 
-            {comments.map( comm =>
-                    <div style={{marginLeft: '20%', marginTop: 50}}>
+            {comments.map( comm => 
+                    <div 
+                    
+                    style={{marginLeft: '20%', marginTop: 50}}>
                         <h5>{comm.email}</h5>
                         <div>{comm.body}</div>
                     </div>
